@@ -30,7 +30,7 @@ const AdminLayout = () => {
 
                     <div className="flex items-center">
                         {/* <img className="h-[4rem] w-[4rem] rounded-full object-cover" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cG9ydHJhaXR8ZW58MHx8MHx8fDA%3D&w=1000&q=80" alt="profile" /> */}
-                        {loggedInUser?.email && <p className="ml-4 text-[1.5rem]">You are logged in as ${loggedInUser.email}</p>}
+                        {loggedInUser?.email && <p className="ml-4 text-[1.5rem]">You are logged in as {loggedInUser.email}</p>}
                     </div>
                 </div>
 

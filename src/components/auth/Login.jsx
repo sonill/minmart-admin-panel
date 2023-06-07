@@ -23,7 +23,6 @@ const Login = () => {
         try {
             await signInWithEmailAndPassword(auth, email, password);
             toast.success("Logged in successfully!", { id: toastId });
-            // navigate to admin panel
             navigate('/admin'); 
         } catch (err) {
             console.log(err.code)
@@ -33,6 +32,9 @@ const Login = () => {
                     errorMessage = "Invalid email.";
                     break;
                 case "auth/user-not-found":
+                    errorMessage = "User not found.";
+                    break;
+
                 case "auth/wrong-password":
                     errorMessage = "Invalid credentials";
                     break;

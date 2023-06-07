@@ -13,7 +13,6 @@ import Stores from './components/admin/Stores'
 import Users from './components/admin/Users';
 import Login from './components/auth/Login';
 import Register from './components/auth/Register';
-import RegiterForm from './components/auth/RegisterForm';
 
 const router = createBrowserRouter(
     createRoutesFromElements(

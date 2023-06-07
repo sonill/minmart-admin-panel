@@ -38,6 +38,7 @@ const Register = () => {
             // await setDoc(doc(db, "users", uid), { name });
 
             toast.success("Registered successfully!", { id: toastId });
+            navigate('/admin'); 
         } catch (err) {
 
             let errorMessage;
