@@ -19,8 +19,8 @@ const Orders = () => {
 
 
     return (
-        <div className='w-full flex flex-col border rounded-[0.5rem] overflow-hidden'>
-            <table className="w-[100%]">
+        <div className='flex flex-col'>
+            <table className="table-auto w-[100%] rounded-[0.5rem] overflow-hidden">
                 <thead>
                     <tr className="bg-[#ededed]">
                         <th className="p-[1.5rem] text-justify text-[1.45rem]">User ID</th>

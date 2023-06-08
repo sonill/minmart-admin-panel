@@ -12,7 +12,9 @@ const Navbar = () => {
 
             <ul className='flex'>
                 <li>
-                    <NavLink to='/login' className="text-[1.5rem]">Login</NavLink>
+                    <NavLink to='/admin' className="text-[1.5rem]">Admin</NavLink>
+
+                    <NavLink to='/login' className="text-[1.5rem] ml-[1rem]">Login</NavLink>
                 </li>
             </ul>
         </nav>

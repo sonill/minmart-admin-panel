@@ -117,9 +117,16 @@ const Register = () => {
                 Register
             </button>
 
-            <div className='text-center text-gray-500 flex justify-center mt-[1rem]'>
-                <p className='mr-[0.5rem] text-[1.45rem]'>Already have an account? Click here to</p>
-                <button type='button' onClick={() => navigate('/login')} className='text-[1.45rem] hover:cursor-pointer bg-transparent underline'>login</button>
+            <div className='text-center text-gray-500 flex flex-col items-center mt-[1rem] w-[40rem]'>
+                <div className='flex mb-[0.25rem]'>
+                    <p className='mr-[0.5rem] text-[1.45rem]'>Already have an account? Click here to</p>
+                    <button type='button' onClick={() => navigate('/login')} className='text-[1.45rem] hover:cursor-pointer bg-transparent underline'>login.</button>
+                </div>
+
+                <div className='flex'>
+                    <p className='mr-[0.5rem] text-[1.45rem]'>Want to go back to home? Click here to get back to</p>
+                    <button type='button' onClick={() => navigate('/')} className='text-[1.45rem] hover:cursor-pointer bg-transparent underline'>home.</button>
+                </div>
             </div>
         </form>
     )

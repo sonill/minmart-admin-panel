@@ -40,7 +40,7 @@ const Sidebar = ({ extend, setExtend, open, setOpen }) => {
     const [width, setWidth] = useState({width: window.innerWidth});
     const [activeMenu, setActiveMenu] = useState(adminMenu[0].name);
 
-    const handleMenuClick = ({ name, url }) => {
+    const handleMenuClick = ({ name }) => {
         setActiveMenu(name)
         if (open) {
             setOpen(!open);
