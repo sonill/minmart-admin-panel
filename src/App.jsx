@@ -7,8 +7,8 @@ import './App.css'
 // import components
 import Home from './components/pages/Home';
 import AdminLayout from './components/admin/AdminLayout';
-import Orders from './components/admin/Orders';
-import Products from './components/admin/Products';
+import Orders from './components/admin/orders/Orders';
+import Products from './components/admin/products/Products';
 import Stores from './components/admin/Stores'
 import Users from './components/admin/Users';
 import Login from './components/auth/Login';

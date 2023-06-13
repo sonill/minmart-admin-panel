@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { toast } from 'react-hot-toast';
-import ProductForm from '../util/ProductForm';
 
 const Users = () => {
     const [keyword, setKeyword] = useState("");
@@ -52,25 +51,6 @@ const Users = () => {
                     }
                 </tbody >
             </table>
-
-            {/******************** Product Form ********************/}
-
-            {showProductForm &&
-                <div
-                    onClick={(e) => {
-                        if (e.target.id === "overlay") {
-                            setShowProductForm(false)
-                        }
-                    }}
-                    id="overlay"
-                    className='absolute top-0 right-0 bottom-0 left-0 bg-gray-500 bg-opacity-50 transition-all ease-out duration-200'
-                >
-                </div>
-            }
-            
-
-            <ProductForm showProductForm={showProductForm} setShowProductForm={setShowProductForm} />
-
             
         </div>
     )
