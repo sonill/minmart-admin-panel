@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { createUserWithEmailAndPassword } from 'firebase/auth'
-import { auth } from '../../firebase'
+import { auth, db } from '../../firebase'
+import { doc, setDoc } from 'firebase/firestore';
 
 const Register = () => {
     const navigate = useNavigate();
@@ -31,16 +32,15 @@ const Register = () => {
         }
 
         try {
-            await createUserWithEmailAndPassword(auth, email, password);
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
             
             // to add data in the firestore
-            // const uid = userCredential.user.uid;
-            // await setDoc(doc(db, "users", uid), { name });
+            const uid = userCredential.user.uid;
+            await setDoc(doc(db, "users", uid), { email });
 
             toast.success("Registered successfully!", { id: toastId });
             navigate('/admin'); 
         } catch (err) {
-
             let errorMessage;
             switch (err.code) {
                 case "auth/invalid-email":

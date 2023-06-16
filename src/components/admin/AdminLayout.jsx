@@ -1,19 +1,18 @@
-import { useState } from "react"
+import { useContext, useState } from "react"
 import { Outlet } from "react-router-dom"
-import { auth } from "../../firebase";
 
 // import components
-import Sidebar from "./Sidebar";
-// import { onAuthStateChanged } from "firebase/auth";
+import Sidebar from '../util/Sidebar'
+
+// import auth context
+import { AuthContext } from "../../context/AuthContextProvider";
 
 const AdminLayout = () => {
     const [open, setOpen] = useState(false);
     const [extend, setExtend] = useState(true);
-    // const [loggedInUser, setLoggedInUser] = useState({});
 
-    // onAuthStateChanged(auth, (currrentUser) => {
-    //     setLoggedInUser(currrentUser)
-    // });
+    // context values
+    const { currentUser } = useContext(AuthContext);
 
     return (
         <div className={`h-auto flex relative w-full transition-all duration-200 ${extend ? "pl-[var(--admin-sidebar-lg)]" : "pl-[var(--admin-sidebar-sm)]"} sm:pl-0`}>
@@ -27,9 +26,13 @@ const AdminLayout = () => {
                         <i onClick={() => setOpen(!open)} className="fa-solid fa-bars text-[2rem] cursor-pointer hidden sm:flex"></i>
                         <i onClick={() => setExtend(!extend)} className={`${extend ? "fa-solid fa-arrow-left-long" : "fa-solid fa-bars"} text-[2rem] cursor-pointer sm:hidden`} ></i>
                     </div>
+
+                    <div>
+                        <p className="text-[1.25rem]">You are logged in as <span className="text-blue-700">{currentUser?.email}</span></p>
+                    </div>
                 </div>
 
-                <div className="outlet_container overflow-hidden h-full p-[2rem] overflow-y-auto relative">
+                <div className="outlet_container overflow-hidden h-full p-[2rem] relative">
                     <Outlet />
                 </div>
             </div>

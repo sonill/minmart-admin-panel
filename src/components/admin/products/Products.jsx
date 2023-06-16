@@ -98,7 +98,7 @@ const Products = () => {
                     return { name: product.name, variations: product.variations };
                 });
 
-                const products = productsArray.filter((prod) => prod.name.includes(keyword) );
+                const products = productsArray.filter((prod) => prod.name.toLowerCase().includes(keyword.toLowerCase()));
                 setProductsData(products);
             }
         } catch (error) {
@@ -129,7 +129,7 @@ const Products = () => {
 
     return (
         <div className="flex flex-col">
-            <div className="w-[100%] flex pb-[1.5rem]">
+            <div className="w-[100%] flex mb-[1.5rem]">
                 <div className="mr-auto relative flex items-center text-[1.25rem] rounded-[0.5rem]">
                     <input
                         placeholder="Quick search"
@@ -168,8 +168,8 @@ const Products = () => {
                 <input id="input_field" type="file" accept=".xlsx" onChange={handleFileChange} className="hidden" />
             </div>
 
-            <div className="overflow-auto  custom-shadow rounded-[0.5rem]">
-                <table className="w-full text-[1.25rem]">
+            <div className="overflow-auto custom-shadow rounded-[0.5rem]">
+                <table className="table-auto w-[100%] rounded-[0.5rem] overflow-hidden custom-shadow">
                     <thead>
                         <tr className="border-b text-justify bg-[#ededed] text-[1.45rem]">
                             <th className="p-[1.5rem]">Product Name</th>

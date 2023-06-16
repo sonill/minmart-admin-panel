@@ -4,41 +4,48 @@ import { Route, RouterProvider, createBrowserRouter, createRoutesFromElements } 
 // import css
 import './App.css'
 
+// protected route
+import Protected from './components/route/Protected';
+
 // import components
-import Home from './components/pages/Home';
-import AdminLayout from './components/admin/AdminLayout';
-import Orders from './components/admin/orders/Orders';
-import Products from './components/admin/products/Products';
-import Stores from './components/admin/Stores'
-import Users from './components/admin/Users';
 import Login from './components/auth/Login';
 import Register from './components/auth/Register';
+import NotFound from './components/util/NotFound';
+import Users from './components/admin/users/Users';
+import Stores from './components/admin/stores/Stores';
+import AdminLayout from './components/admin/AdminLayout';
+import Products from './components/admin/products/Products';
+import AllOrders from './components/admin/orders/AllOrders';
+import ForgotPassword from './components/pages/ForgotPassword';
 
-const router = createBrowserRouter(
-    createRoutesFromElements(
-        <>
-            <Route path='/' element={<Home />} />
-            <Route path='login' element={<Login />} />
-            <Route path='register' element={<Register />} />
-            <Route path='admin' element={<AdminLayout />}>
-                <Route index element={<Orders />} />
-                <Route exact path='orders' element={<Orders />} />
-                <Route exact path='products' element={<Products />} />
-                <Route exact path='stores' element={<Stores />} />
-                <Route exact path='users' element={<Users />} />
-            </Route>
-        </>
-    )
-);
-
+// app
 function App() {
 
+    const router = createBrowserRouter(
+        createRoutesFromElements(
+            <>
+                <Route path='/' element={<Login />} />
+                <Route path='register' element={<Register />} />
+                <Route path='forgot-password' element={<ForgotPassword />} />
+    
+                <Route path='admin' element={<Protected isLoggedIn={false}><AdminLayout /></Protected>}>
+                    <Route index element={<AllOrders />} />
+                    <Route path='orders' element={<AllOrders />} />
+                    <Route path='products' element={<Products />} />
+                    <Route path='stores' element={<Stores />} />
+                    <Route path='users' element={<Users />} />
+                </Route>
+    
+                <Route path="*" element={<NotFound />} />
+            </>
+        )
+    );
+
+    
     return (
         <>
-            <div className="app">
-                <Toaster position="top-center" reverseOrder={false} />
-                <RouterProvider router={router} />
-            </div>
+            <Toaster position="top-center" reverseOrder={false} />
+            <RouterProvider router={router} />
         </>
     )
 }

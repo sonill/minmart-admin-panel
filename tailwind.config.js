@@ -10,6 +10,14 @@ export default {
             'md': { 'max': '768px' },
             'sm': { 'max': '480px' },
         },
+        extend: {
+            animation: {
+
+            },
+            keyframes: {
+                
+            }
+        }
     },
     plugins: [],
 }
