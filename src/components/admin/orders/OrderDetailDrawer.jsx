@@ -43,7 +43,7 @@ const OrderDetailDrawer = ({ title, orderDetailDrawer, setOrderDetailDrawer, ord
                     <tbody>
                         {orders[0] && orders.map((odr, index) => (
                             <tr key={index} className="border">
-                                <td className="p-[1.5rem] text-[1.35rem]">{moment(odr.date.seconds * 1000).format('YYYY-MM-DD')}</td>
+                                <td className="p-[1.5rem] text-[1.35rem]">{moment(odr.date).format('YYYY-MM-DD HH:mm A')}</td>
                                 <td className="p-[1.5rem] text-[1.35rem]">{odr.status}</td>
                                 <td className="p-[1.5rem] text-[1.35rem]">{odr.total}</td>
                                 <td className="p-[1.5rem] text-[1.35rem]">

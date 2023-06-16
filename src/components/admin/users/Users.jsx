@@ -85,7 +85,7 @@ const Users = () => {
                         <tr className="bg-[#ededed]">
                             <th className="p-[1.5rem] text-justify text-[1.45rem]">Name</th>
                             <th className="p-[1.5rem] text-justify text-[1.45rem]">Email</th>
-                            <th className="p-[1.5rem] text-justify text-[1.45rem]">Contact</th>
+                            <th className="p-[1.5rem] text-justify text-[1.45rem]">Mobile</th>
                             <th className="p-[1.5rem] text-justify text-[1.45rem]">Role</th>
                             <th className="p-[1.5rem] text-justify text-[1.45rem]">Action</th>
                         </tr>

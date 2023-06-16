@@ -21,7 +21,7 @@ const AdminLayout = () => {
             </div>
 
             <div className="w-[100%] min-h-[100vh] flex flex-col">
-                <div className="h-[var(--nav-height)] px-[2rem] border shadow-sm flex items-center justify-between">
+                <div className="h-[var(--nav-height)] bg-white px-[2rem] border shadow-sm flex items-center justify-between">
                     <div>
                         <i onClick={() => setOpen(!open)} className="fa-solid fa-bars text-[2rem] cursor-pointer hidden sm:flex"></i>
                         <i onClick={() => setExtend(!extend)} className={`${extend ? "fa-solid fa-arrow-left-long" : "fa-solid fa-bars"} text-[2rem] cursor-pointer sm:hidden`} ></i>
@@ -32,7 +32,7 @@ const AdminLayout = () => {
                     </div>
                 </div>
 
-                <div className="outlet_container overflow-hidden h-full p-[2rem] relative">
+                <div className="overflow-hidden h-full p-[2rem] relative">
                     <Outlet />
                 </div>
             </div>

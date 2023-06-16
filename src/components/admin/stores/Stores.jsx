@@ -6,13 +6,14 @@ const Stores = () => {
     const [keyword, setKeyword] = useState('');
     const [stores, setStores] = useState([]);
 
-    const getStores = async () => {
-        const querySnapshot = await getDocs(collection(db, "stores"));
-        const storesData = querySnapshot.docs.map((doc) => doc.data()).filter((store) => store.name.toLowerCase().includes(keyword.toLowerCase()));
-        setStores(storesData);
-    };
-
+    
     useEffect(() => {
+        const getStores = async () => {
+            const querySnapshot = await getDocs(collection(db, "stores"));
+            const storesData = querySnapshot.docs.map((doc) => doc.data()).filter((store) => store && store.company_name && store.company_name.toLowerCase().includes(keyword.toLowerCase()));
+            setStores(storesData);
+        };
+        
         getStores();
     }, [keyword]);
 
@@ -44,18 +45,18 @@ const Stores = () => {
                             <th className="p-[1.5rem] text-justify text-[1.45rem]">Email</th>
                             <th className="p-[1.5rem] text-justify text-[1.45rem]"> Phone Number </th>
                             <th className="p-[1.5rem] text-justify text-[1.45rem]">Address</th>
-                            <th className="p-[1.5rem] text-justify text-[1.45rem]"> PAN Number </th>
+                            <th className="p-[1.5rem] text-justify text-[1.45rem]">PAN Number </th>
                         </tr>
                     </thead>
                     <tbody>
                         {stores.map((store, i) => (
                             <tr key={i} className="border-b last:border-0">
-                                <td className="p-[1.5rem] text-[1.35rem] ">{store.name}</td>
-                                <td className="p-[1.5rem] text-[1.35rem]"> {store.contact_person} </td>
-                                <td className="p-[1.5rem] text-[1.35rem]">{store.email}</td>
-                                <td className="p-[1.5rem] text-[1.35rem]">{store.mobile_no}</td>
-                                <td className="p-[1.5rem] text-[1.35rem]">{store.address}</td>
-                                <td className="p-[1.5rem] text-[1.35rem] ">{store.pan_no}</td>
+                                <td className="p-[1.5rem] text-[1.35rem] ">{store.company_name ? store.company_name : "-"}</td>
+                                <td className="p-[1.5rem] text-[1.35rem]"> {store.contact_person ? store.contact_person : "-"} </td>
+                                <td className="p-[1.5rem] text-[1.35rem]">{store.email ? store.email : "-"}</td>
+                                <td className="p-[1.5rem] text-[1.35rem]">{store.mobile_number ? store.mobile_number : "-"}</td>
+                                <td className="p-[1.5rem] text-[1.35rem]">{store.company_address ? store.company_address : "-"}</td>
+                                <td className="p-[1.5rem] text-[1.35rem] ">{store.company_pan ? store.company_pan : "-"}</td>
                             </tr>
                         ))}
                     </tbody>

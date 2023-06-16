@@ -1,10 +1,14 @@
 import { read, utils } from "xlsx";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { toast } from "react-hot-toast";
 import { addDoc, collection, deleteDoc, getDocs } from "firebase/firestore";
 import { db } from "../../../firebase";
+import { AuthContext } from "../../../context/AuthContextProvider"
 
 const Products = () => {
+    // context
+    const {currentUser} = useContext(AuthContext);
+
     const nameRef = useRef(null);
     const [keyword, setKeyword] = useState("");
     const [excelData, setExcelData] = useState([]);
@@ -44,6 +48,7 @@ const Products = () => {
 
             excelData.forEach((data) => {
                 const variations = [];
+
                 Object.keys(data).forEach((key) => {
                     if (key !== "name" && data[key] !== "null") {
                         variations.push({ label: key, price: data[key] });
@@ -59,7 +64,7 @@ const Products = () => {
                 deleteDoc(doc.ref);
             });
 
-            await addDoc(collection(db, "products"), { items: items });
+            await addDoc(collection(db, "products"), items, "Products Document");
             fetchProducts();
             toast.success("Data saved successfully!", { id: toastId });
             handleFileRemove();
@@ -93,14 +98,16 @@ const Products = () => {
             const data = querySnapshot.docs.map((doc) => doc.data());
 
             if (data.length) {
-                const productsArray = Object.keys(data[0].items).map((key) => {
-                    const product = data[0].items[key];
+                const productsArray = Object.keys(data[0]).map((key) => {
+                    const product = data[0][key];
                     return { name: product.name, variations: product.variations };
                 });
 
                 const products = productsArray.filter((prod) => prod.name.toLowerCase().includes(keyword.toLowerCase()));
                 setProductsData(products);
             }
+
+           
         } catch (error) {
             toast.error(error.message);
         }
@@ -158,7 +165,7 @@ const Products = () => {
                     </button>
                 )}
 
-                {excelData.length === 0 && (
+                {excelData.length === 0 && currentUser.role === "admin" && (
                     <label htmlFor="input_field" className="cursor-pointer h-[4rem] flex items-center text-[1.25rem] bg-blue-500 hover:bg-blue-800 duration-150 text-[#fff] px-[2rem] py-[1rem] rounded-[0.5rem] shadow-lg" >
                         <i className="fa-solid fa-upload text-white"></i>
                         <p className="ml-[1rem]">Upload CSV</p>
