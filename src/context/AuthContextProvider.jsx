@@ -12,6 +12,7 @@ export const AuthContextProvider = ({ children }) => {
     const [currentUser, setCurrentUser] = useState({});
     const [isAdmin, setIsAdmin] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [isActive, setIsActive] = useState(true);
 
     // value object
     const value = {
@@ -19,13 +20,15 @@ export const AuthContextProvider = ({ children }) => {
         setIsLoggedIn,
         isAdmin,
         setIsAdmin,
-        currentUser
+        currentUser,
+        isActive
     };
 
     useEffect(() => {
         onAuthStateChanged(auth, async (currentUser) => {
-            if(currentUser !== null){
-                try{
+
+            if (currentUser !== null) {
+                try {
                     const uid = currentUser.uid;
                     const docSnapshot = await getDoc(doc(db, "users", uid));
                     const userData = docSnapshot.data();
@@ -34,10 +37,12 @@ export const AuthContextProvider = ({ children }) => {
 
                     setIsLoggedIn(true);
 
-                    if(userData.role === "admin"){
+                    setIsActive(userData.active);
+
+                    if (userData.role === "admin") {
                         setIsAdmin(true);
                     }
-                }catch (err){
+                } catch (err) {
                     toast.error(err.message);
                 }
             }

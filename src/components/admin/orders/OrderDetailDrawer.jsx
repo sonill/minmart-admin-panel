@@ -1,11 +1,42 @@
 import moment from 'moment/moment'
-import { useState } from 'react'
+import { db } from "../../../firebase"
+import { doc, deleteDoc, collection, getDocs } from "firebase/firestore"
 
 // import component
-import OrderItemsDrawer from './OrderItemsDrawer'
+import TableOuter from '../TableOuter';
+import React from 'react';
+import { toast } from "react-hot-toast";
 
-const OrderDetailDrawer = ({ title, orderDetailDrawer, setOrderDetailDrawer, orders }) => {
-    const [openOrderItemsDrawer, setOpenOrderItemsDrawer] = useState(false);
+const OrderDetailDrawer = ({ orderDetailDrawer, setOrderDetailDrawer, orders, store_id, store_name, getOrders }) => {
+
+    let totalPrice = 0;
+
+
+    const deleteSubcollection = async (collectionRef) => {
+        const querySnapshot = await getDocs(collectionRef);
+
+        // Delete documents in the subcollection
+        const deletePromises = querySnapshot.docs.map(async (doc) => {
+            const subcollectionRef = collection(doc.ref, 'subcollection'); // Replace 'subcollection' with your actual subcollection name
+            await deleteSubcollection(subcollectionRef); // Recursively delete subcollections
+            await deleteDoc(doc.ref); // Delete the document
+        });
+        await Promise.all(deletePromises);
+    };
+
+    const markOrderAsDispatched = async () => {
+        try {
+            const documentRef = doc(db, 'all_orders', store_id);
+            await deleteSubcollection(collection(documentRef, 'orders'));
+            await deleteDoc(documentRef); // Delete the parent document
+            toast.success("Current order is removed from the database.");
+            setOrderDetailDrawer(false);
+            getOrders();
+        } catch (error) {
+            toast.error('Error deleting document:', error);
+        }
+    };
+
 
     return (
         <>
@@ -21,41 +52,53 @@ const OrderDetailDrawer = ({ title, orderDetailDrawer, setOrderDetailDrawer, ord
             </div>
 
             <div className={` ${orderDetailDrawer ? 'top-[0]' : 'top-[100%]'} w-[100%] p-[2rem] absolute top-0 left-0 h-full transition-all ease-in-out duration-300 z-[50] bg-white `} >
-                <div className='flex justify-between items-center mb-[1rem]'>
-                    <h1 className='text-[1.8rem] font-bold'>{title}</h1>
-                    <button onClick={() => setOrderDetailDrawer(false)} className="h-[3.5rem] w-[8rem] text-[1.25rem] bg-gray-600 text-white custom-shadow rounded-[0.5rem]">
+                <div className='flex  items-center mb-[1rem]'>
+                    <h1 className='text-[1.8rem] flex-1 '>Orders of <span className="font-bold text-[1.8rem] text-green-600">{store_name}</span></h1>
+
+                    <button onClick={() => markOrderAsDispatched()} className="h-[3.5rem] mr-4 text-[1.25rem] bg-green-600 text-white px-[1.2rem]  rounded-[0.5rem]">
+                        <i className="fa-solid fa-check mr-[1rem]"></i>
+                        Mark as Dispatched
+                    </button>
+
+                    <button onClick={() => setOrderDetailDrawer(false)} className="h-[3.5rem] px-[1.2rem] text-[1.25rem] bg-gray-600 text-white  rounded-[0.5rem]">
                         <i className="fa-solid fa-xmark mr-[1rem]"></i>
                         Close
                     </button>
 
                 </div>
 
-                <table className="table-auto w-[100%] rounded-[0.5rem] overflow-hidden custom-shadow">
-                    <thead>
-                        <tr className="bg-[#ededed]">
-                            <th className="p-[1.5rem] text-justify text-[1.45rem]">Date</th>
-                            <th className="p-[1.5rem] text-justify text-[1.45rem]">Status</th>
-                            <th className="p-[1.5rem] text-justify text-[1.45rem]">Total</th>
-                            <th className="p-[1.5rem] text-justify text-[1.45rem]">Order Items</th>
-                        </tr>
-                    </thead>
+                <TableOuter thead_data={['Item', '', 'Qty', 'Price']} >
 
-                    <tbody>
-                        {orders[0] && orders.map((odr, index) => (
-                            <tr key={index} className="border">
-                                <td className="p-[1.5rem] text-[1.35rem]">{moment(odr.date).format('YYYY-MM-DD HH:mm A')}</td>
-                                <td className="p-[1.5rem] text-[1.35rem]">{odr.status}</td>
-                                <td className="p-[1.5rem] text-[1.35rem]">{odr.total}</td>
-                                <td className="p-[1.5rem] text-[1.35rem]">
-                                    <i onClick={() => setOpenOrderItemsDrawer(true)} className="fa-solid fa-plus  h-[2.5rem] w-[2.5rem] grid place-items-center cursor-pointer rounded-[0.5rem] bg-slate-100" ></i>
-                                    <OrderItemsDrawer openOrderItemsDrawer={openOrderItemsDrawer} setOpenOrderItemsDrawer={setOpenOrderItemsDrawer} orderItems={odr.orderItems} />
-                                </td>
+                    {orders[0] && orders.map((odr, index) => (
+                        <React.Fragment key={index}>
+                            <tr key={index} className="">
+                                <td colSpan={4} className="py-[1rem] px-[1.5rem]  text-[1.35rem] font-bold">
+                                    {moment(odr.date).format('MMMM DD, YYYY h:mm A')}</td>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
 
-            </div>
+                            {odr.orderItems[0] && odr.orderItems.map((item, index) => {
+                                totalPrice += item.price; // Update the total price
+
+                                return (
+                                    <tr key={index} className="border border-collapse">
+                                        <td className="py-[1rem] px-[1.5rem] text-[1.35rem] w-[50px] ">{index + 1}</td>
+                                        <td className="py-[1rem] px-[1.5rem] text-[1.35rem] ">{item.itemName}</td>
+                                        <td className="py-[1rem] px-[1.5rem] text-[1.35rem]">{item.quantity + ' ' + item.unitType}</td>
+                                        <td className="py-[1rem] px-[1.5rem] text-[1.35rem]">Rs. {item.price}</td>
+                                    </tr>
+                                );
+                            })}
+
+                        </React.Fragment>
+                    ))}
+                    <tr>
+                        <td colSpan={3} className="py-[1rem] px-[1.5rem]  text-[1.35rem] font-bold">Total</td>
+                        <td className="py-[1rem] px-[1.5rem]  text-[1.35rem] font-bold">Rs. {totalPrice.toFixed(2)}</td>
+                    </tr>
+
+                </TableOuter>
+
+            </div >
         </>
     )
 }

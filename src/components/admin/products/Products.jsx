@@ -4,10 +4,11 @@ import { toast } from "react-hot-toast";
 import { addDoc, collection, deleteDoc, getDocs } from "firebase/firestore";
 import { db } from "../../../firebase";
 import { AuthContext } from "../../../context/AuthContextProvider"
+import TableOuter from "../TableOuter";
 
 const Products = () => {
     // context
-    const {currentUser} = useContext(AuthContext);
+    const { currentUser } = useContext(AuthContext);
 
     const nameRef = useRef(null);
     const [keyword, setKeyword] = useState("");
@@ -84,9 +85,9 @@ const Products = () => {
 
         const product = productsData.find((data) => data.name === productName);
         if (product) {
-            const variation = product.variations.find((variation) => variation.label === selectedOption );
+            const variation = product.variations.find((variation) => variation.label === selectedOption);
             if (variation) {
-                setSelectedProductPrice((prevState) => ({ ...prevState, [productName]: variation.price}));
+                setSelectedProductPrice((prevState) => ({ ...prevState, [productName]: variation.price }));
             }
         }
     };
@@ -103,11 +104,15 @@ const Products = () => {
                     return { name: product.name, variations: product.variations };
                 });
 
-                const products = productsArray.filter((prod) => prod.name.toLowerCase().includes(keyword.toLowerCase()));
+                const products = productsArray.filter((prod) => prod.name.toLowerCase().includes(keyword.toLowerCase()))
+
+                    // sorty array alphabetically according.
+                    .sort((a, b) => a.name.localeCompare(b.name)); // Sort products alphabetically by product name
+
                 setProductsData(products);
             }
 
-           
+
         } catch (error) {
             toast.error(error.message);
         }
@@ -125,7 +130,7 @@ const Products = () => {
         }, {});
 
         const defaultPrice = productsData.reduce((acc, product) => {
-            const variation = product.variations.find( (variation) => variation.label === defaultVariation[product.name] );
+            const variation = product.variations.find((variation) => variation.label === defaultVariation[product.name]);
             acc[product.name] = variation?.price || null;
             return acc;
         }, {});
@@ -168,47 +173,44 @@ const Products = () => {
                 {excelData.length === 0 && currentUser.role === "admin" && (
                     <label htmlFor="input_field" className="cursor-pointer h-[4rem] flex items-center text-[1.25rem] bg-blue-500 hover:bg-blue-800 duration-150 text-[#fff] px-[2rem] py-[1rem] rounded-[0.5rem] shadow-lg" >
                         <i className="fa-solid fa-upload text-white"></i>
-                        <p className="ml-[1rem]">Upload CSV</p>
+                        <p className="ml-[1rem]">Upload Products in Excel Format</p>
                     </label>
                 )}
 
                 <input id="input_field" type="file" accept=".xlsx" onChange={handleFileChange} className="hidden" />
             </div>
 
-            <div className="overflow-auto custom-shadow rounded-[0.5rem]">
-                <table className="table-auto w-[100%] rounded-[0.5rem] overflow-hidden custom-shadow">
-                    <thead>
-                        <tr className="border-b text-justify bg-[#ededed] text-[1.45rem]">
-                            <th className="p-[1.5rem]">Product Name</th>
-                            <th className="p-[1.5rem]">Variation</th>
-                            <th className="p-[1.5rem]">Price (Rs)</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {productsData.map((product) => (
-                            <tr key={product.name} className="border">
-                                <td className="p-[1.5rem] text-[1.35rem]">{product.name}</td>
-                                <td className="p-[1.5rem] text-[1.35rem]">
-                                    <select
-                                        value={selectedVariation[product.name]}
-                                        onChange={(e) => handleVariationChange(e, product.name) }
-                                        className="w-[12.5rem] bg-gray-200 rounded-[0.5rem] p-[0.75rem] text-[1.5rem]"
-                                    >
+
+            <TableOuter thead_data={['Product Name', 'Price']} >
+                {productsData.map((product) => (
+                    <tr key={product.name} className="border capitalize ">
+                        <td className="px-[1.3rem] py-[0.7rem]  ">{product.name}</td>
+                        <td className="px-[1.3rem] py-[0.7rem] ">
+                            <table className="" >
+                                <tbody>
+                                    <tr className="bg-gray-100">
+                                        {product.variations
+                                            .sort((a, b) => a.label.localeCompare(b.label)) // Sort the variations alphabetically
+                                            .map((variation) => (
+                                                <td key={variation.label} className="px-[1rem] py-[0.5rem] border">
+                                                    {variation.label}
+                                                </td>
+                                            ))}
+                                    </tr>
+
+                                    <tr >
                                         {product.variations.map((variation) => (
-                                            <option key={variation.label} value={variation.label}>
-                                                {variation.label}
-                                            </option>
+                                            <td key={variation.price} className="px-[1rem] py-[0.5rem] border">Rs. {variation.price}</td>
                                         ))}
-                                    </select>
-                                </td>
-                                <td className="p-[1.5rem] text-[1.35rem]">
-                                    {selectedProductPrice[product.name] || "-"}
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+
+                    </tr>
+                ))}
+            </TableOuter>
+
         </div>
     );
 };

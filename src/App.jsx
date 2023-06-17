@@ -27,22 +27,23 @@ function App() {
                 <Route path='/' element={<Login />} />
                 <Route path='register' element={<Register />} />
                 <Route path='forgot-password' element={<ForgotPassword />} />
-    
-                <Route path='admin' element={<Protected isLoggedIn={false}><AdminLayout /></Protected>}>
+
+                <Route path='admin' element={<Protected ><AdminLayout /></Protected>}>
                     <Route index element={<AllOrders />} />
                     <Route path='orders' element={<AllOrders />} />
                     <Route path='products' element={<Products />} />
                     <Route path='stores' element={<Stores />} />
                     <Route path='users' element={<Users />} />
                 </Route>
-    
+
                 <Route path="*" element={<NotFound />} />
             </>
         )
     );
 
-    
+
     return (
+
         <>
             <Toaster position="top-center" reverseOrder={false} />
             <RouterProvider router={router} />

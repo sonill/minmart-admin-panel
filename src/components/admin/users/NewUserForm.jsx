@@ -7,8 +7,8 @@ import { AuthContext } from "../../../context/AuthContextProvider";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
 
 const NewUserForm = ({ openNewUserForm, setOpenNewUserForm, getUsers }) => {
-    // context 
-    const {currentUser} = useContext(AuthContext);
+    // context
+    const { currentUser } = useContext(AuthContext);
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -46,15 +46,15 @@ const NewUserForm = ({ openNewUserForm, setOpenNewUserForm, getUsers }) => {
         }
 
         try {
-            
+
             //add new user
             const newUserCredentials = await createUserWithEmailAndPassword(auth, email, password);
             const newUserUid = newUserCredentials.user.uid;
-            await setDoc(doc(db, "users", newUserUid), { name, email, role, mobile_number: number});
+            await setDoc(doc(db, "users", newUserUid), { name, email, role, mobile_number: number });
             signOut(auth);
 
             await signInWithEmailAndPassword(auth, currentUser.email, JSON.parse(localStorage.getItem("randomvalue")));
-          
+
             getUsers();
             handleClose();
             toast.success("User added successfully.", { id: toastId });
@@ -98,9 +98,9 @@ const NewUserForm = ({ openNewUserForm, setOpenNewUserForm, getUsers }) => {
                 ></div>
             )}
 
-            <div className={`${openNewUserForm ? "right-[0]" : "right-[-42.5rem]"} w-[42.5rem]  p-[2rem] flex flex-col justify-center bg-white absolute top-0 bottom-0 h-full transition-all ease-in-out duration-300 z-[50]`} >
+            <div className={`${openNewUserForm ? "right-[0]" : "right-[-42.5rem]"} w-[42.5rem]  p-[2rem] flex flex-col justify-top  bg-gray-100 absolute top-0 bottom-0 h-full transition-all ease-in-out duration-300 z-[50]`} >
                 <div className="flex justify-between items-center mb-[2rem]">
-                    <h1 className="text-[2rem] font-bold ">Add User</h1>
+                    <h1 className="text-[2rem] font-bold ">Add New User</h1>
                     <i onClick={handleClose} className="fa-solid fa-xmark text-[2rem] cursor-pointer" ></i>
                 </div>
 

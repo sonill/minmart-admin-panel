@@ -18,7 +18,7 @@ const UpdateUserForm = ({ openUpdateUserForm, setOpenUpdateUserForm, user, getUs
 
         const userRef = doc(db, "users", user?.uid);
         try {
-            await updateDoc(userRef, {name, role, mobile_number: number});
+            await updateDoc(userRef, { name, role, mobile_number: number });
             getUsers();
             setOpenUpdateUserForm(false);
             toast.success("User updated successfully.", { id: toastId });
@@ -57,7 +57,7 @@ const UpdateUserForm = ({ openUpdateUserForm, setOpenUpdateUserForm, user, getUs
                 ></div>
             )}
 
-            <div className={`${openUpdateUserForm ? "right-[0]" : "right-[-42.5rem]"} w-[42.5rem] p-[2rem] flex flex-col bg-white absolute top-0 bottom-0 h-full transition-all ease-in-out duration-300 z-[50]`} >
+            <div className={`${openUpdateUserForm ? "right-[0]" : "right-[-42.5rem]"} w-[42.5rem] p-[2rem] flex flex-col bg-gray-100 absolute top-0 bottom-0 h-full transition-all ease-in-out duration-300 z-[50]`} >
                 <div className="flex justify-between items-center mb-[2rem]">
                     <h1 className="text-[2rem] font-bold ">Update User</h1>
                     <i onClick={() => setOpenUpdateUserForm()} className="fa-solid fa-xmark text-[2rem] cursor-pointer"></i>
